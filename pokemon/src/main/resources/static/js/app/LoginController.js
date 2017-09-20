@@ -4,12 +4,11 @@ angular.module('pokemonApp').controller('LoginController',
 	[ 'LoginService', '$scope', function(LoginService, $scope) {
 
 		var self = this;
-		self.login = {};
+		self.model = {};
 
+		self.submit = submit;
 		self.createLogin = createLogin;
-		self.updateLogin = updateLogin;
-		self.editLogin = editLogin;
-		self.login = login;
+		self.signup = signup;
 		self.reset = reset;
 
 		self.successMessage = '';
@@ -19,36 +18,16 @@ angular.module('pokemonApp').controller('LoginController',
 		self.onlyIntegers = /^\d+$/;
 		self.onlyNumbers = /^\d+([,.]\d+)?$/;
 
-		function createLogin(login) {
-			console.log('About to create login');
-			LoginService.createLogin(login)
-				.then(
-					function(response) {
-						console.log('Login created successfully');
-						self.successMessage = 'Login created successfully';
-						self.errorMessage = '';
-						self.done = true;
-						self.login = {};
-						$scope.myForm.$setPristine();
-					},
-					function(errResponse) {
-						console.error('Error while creating Login');
-						self.errorMessage = 'Error while creating Login: ' + errResponse.data.errorMessage;
-						self.successMessage = '';
-					}
-			);
-		}
-
-		function login(login) {
-			console.log('About to login');
-			LoginService.login(login)
+		function submit() {
+			console.log('Submitting');
+			TeamService.login(self.model)
 				.then(
 					function(response) {
 						console.log('Login successfully');
 						self.successMessage = 'Login successfully';
 						self.errorMessage = '';
 						self.done = true;
-						self.login = response;
+						self.model = {};
 						$scope.myForm.$setPristine();
 					},
 					function(errResponse) {
@@ -59,43 +38,38 @@ angular.module('pokemonApp').controller('LoginController',
 			);
 		}
 
-		function updateLogin(login, id) {
-			console.log('About to update Login');
-			LoginService.updateLogin(login, id)
+		function createLogin() {
+			console.log('Create login');
+			TeamService.login(self.model)
 				.then(
 					function(response) {
-						console.log('Login updated successfully');
-						self.successMessage = 'Login updated successfully';
+						console.log('Create Login successfully');
+						self.successMessage = 'Create Login successfully';
 						self.errorMessage = '';
 						self.done = true;
+						self.model = {};
 						$scope.myForm.$setPristine();
 					},
 					function(errResponse) {
-						console.error('Error while updating Login');
-						self.errorMessage = 'Error while updating Login ' + errResponse.data;
+						console.error('Error while Create Login');
+						self.errorMessage = 'Error while Create Login: ' + errResponse.data.errorMessage;
 						self.successMessage = '';
 					}
 			);
 		}
 
-		function editLogin(id) {
-			self.successMessage = '';
-			self.errorMessage = '';
-			LoginService.getLogin(id).then(
-				function(login) {
-					self.login = login;
-				},
-				function(errResponse) {
-					console.error('Error while removing Login ' + id + ', Error :' + errResponse.data);
-				}
-			);
+
+		function signup() {
+			//do redirect page create Login		
 		}
 
 		function reset() {
 			self.successMessage = '';
 			self.errorMessage = '';
-			self.login = {};
+			self.model = {};
 			$scope.myForm.$setPristine(); //reset Form
 		}
 	}
+
+
 	]);

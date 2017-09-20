@@ -5,39 +5,24 @@ angular.module('pokemonApp').factory('LoginService',
 		function($localStorage, $http, $q, urls) {
 
 			var factory = {
-				getLogin : getLogin,
-				createLogin : createLogin,
-				updateLogin : updateLogin,
-				login : login
+				login : login,
+				createUser : createUser,
 			};
 
 			return factory;
 
 			function login(login) {
+				console.log('Login');
+				var deferred = $q.defer();
 				$http.post(urls.LOGIN_SERVICE_API, login)
 					.then(
 						function(response) {
 							console.log('Login successfully');
-							deferred.resolve(response.data);
+							$localStorage.token = response.data;
+							deferred.resolve(response);
 						},
 						function(errResponse) {
 							console.error('Error while login');
-							deferred.reject(errResponse);
-						}
-				);
-			}
-
-			function getLogin(id) {
-				console.log('Fetching Login with id :' + id);
-				var deferred = $q.defer();
-				$http.get(urls.LOGIN_SERVICE_API + id)
-					.then(
-						function(response) {
-							console.log('Fetched successfully Login with id :' + id);
-							deferred.resolve(response.data);
-						},
-						function(errResponse) {
-							console.error('Error while loading login with id :' + id);
 							deferred.reject(errResponse);
 						}
 				);
@@ -47,10 +32,10 @@ angular.module('pokemonApp').factory('LoginService',
 			function createLogin(login) {
 				console.log('Creating Login');
 				var deferred = $q.defer();
-				$http.post(urls.USER_SERVICE_API, login)
+				$http.post(urls.LOGIN_SERVICE_API + 'create', login)
 					.then(
 						function(response) {
-							loadAllLogins();
+							console.log('Login create successfully');
 							deferred.resolve(response.data);
 						},
 						function(errResponse) {
@@ -61,21 +46,5 @@ angular.module('pokemonApp').factory('LoginService',
 				return deferred.promise;
 			}
 
-			function updateLogin(login, id) {
-				console.log('Updating Login with id ' + id);
-				var deferred = $q.defer();
-				$http.put(urls.LOGIN_SERVICE_API + id, login)
-					.then(
-						function(response) {
-							loadAllLogins();
-							deferred.resolve(response.data);
-						},
-						function(errResponse) {
-							console.error('Error while updating Login with id :' + id);
-							deferred.reject(errResponse);
-						}
-				);
-				return deferred.promise;
-			}
 		}
 	]);

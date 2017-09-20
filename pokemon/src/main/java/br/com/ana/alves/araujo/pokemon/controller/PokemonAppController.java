@@ -11,12 +11,6 @@ public class PokemonAppController {
 	@RequestMapping("/")
 	String home(ModelMap modal) {
 		modal.addAttribute("title", "Pokemon");
-		return "home";
-	}
-
-	@RequestMapping("/login")
-	String login(ModelMap modal) {
-		modal.addAttribute("title", "Pokemon Login");
 		return "login";
 	}
 	
@@ -25,7 +19,19 @@ public class PokemonAppController {
 		modal.addAttribute("title", "Pokemon Create Login");
 		return "createlogin";
 	}
-
+	
+	@RequestMapping("/createteam")
+	String createTeam(ModelMap modal) {
+		modal.addAttribute("title", "Pokemon Create Team");
+		return "team";
+	}
+	
+	@RequestMapping("/detailteam")
+	String detailTeam(ModelMap modal) {
+		modal.addAttribute("title", "Pokemon Detail Team");
+		return "detailteam";
+	}
+	
 	@RequestMapping("/partials/{page}")
 	String partialHandler(@PathVariable("page") final String page) {
 		return page;

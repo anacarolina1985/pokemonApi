@@ -7,13 +7,13 @@ spring:
 datasource:
   sampleapp:
     url: jdbc:mysql://localhost:3306/pokemon
-    username: 
-    password: 
+    username: root
+    password: root
     driverClassName: com.mysql.jdbc.Driver
     defaultSchema: 
     maxPoolSize: 20
     hibernate:
-      hbm2ddl.method: create-drop
+      hbm2ddl.method: update
       show_sql: true
       format_sql: true
       dialect: org.hibernate.dialect.MySQLDialect
