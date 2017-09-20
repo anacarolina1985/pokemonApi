@@ -1,0 +1,33 @@
+server:
+  port: 8080
+  contextPath: /PokemonApp
+spring:
+  profiles: local,default
+datasource:
+  sampleapp:
+    url: jdbc:mysql://localhost:3306/pokemon
+    username: root
+    password: root
+    driverClassName: com.mysql.jdbc.Driver
+    defaultSchema: null
+    maxPoolSize: 20
+    hibernate:
+      hbm2ddl.method: create-drop
+      show_sql: true
+      format_sql: true
+      dialect: org.hibernate.dialect.MySQLDialect
+spring:
+  profiles: prod
+datasource:
+  sampleapp:
+    url: jdbc:mysql://localhost:3306/pokemon
+    username: root
+    password: root
+    driverClassName: com.mysql.jdbc.Driver
+    defaultSchema: null
+    maxPoolSize: 20
+    hibernate:
+      hbm2ddl.method: create-drop
+      show_sql: true
+      format_sql: true
+      dialect: org.hibernate.dialect.MySQLDialect
