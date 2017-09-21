@@ -28,20 +28,29 @@ public class LoginController {
 
 	@PostMapping("/")
 	public ResponseEntity<?> login(@RequestBody Login login) {
-		Login accessLogin = loginService.findByName(login.getUsername(), login.getPassword());
-		if (accessLogin == null) {
-			return new ResponseEntity<>(new CustomErrorType("Login not match"), HttpStatus.NOT_FOUND);
+		try {
+			Login accessLogin = loginService.findByName(login.getUsername(), login.getPassword());
+			if (accessLogin == null) {
+				return new ResponseEntity<>(new CustomErrorType("Login not match"), HttpStatus.NOT_FOUND);
 
+			}
+			return new ResponseEntity<>(new ResponseBase(LoginJWTUtils.createJWT(login)), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(new CustomErrorType(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return new ResponseEntity<>(new ResponseBase(LoginJWTUtils.createJWT(login)), HttpStatus.OK);
 	}
 
 	@PostMapping("/create")
 	public ResponseEntity<?> createLogin(@Validated @RequestBody Login login) {
-		login = loginService.saveUser(login);
-		if (login == null) {
-			return new ResponseEntity<>(new CustomErrorType("login not Modified"), HttpStatus.INTERNAL_SERVER_ERROR);
+		try {
+			login = loginService.saveUser(login);
+			if (login == null) {
+				return new ResponseEntity<>(new CustomErrorType("login not Modified"),
+						HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+			return new ResponseEntity<>(new ResponseBase(LoginJWTUtils.createJWT(login)), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(new CustomErrorType(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return new ResponseEntity<>(new ResponseBase(LoginJWTUtils.createJWT(login)), HttpStatus.OK);
 	}
 }

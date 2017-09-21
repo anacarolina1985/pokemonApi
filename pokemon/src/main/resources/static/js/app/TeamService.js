@@ -18,17 +18,22 @@ angular.module('pokemonApp').factory('TeamService',
 			function loadAllTeams() {
 				console.log('Fetching all teams');
 				var deferred = $q.defer();
-				$http.get(urls.TEAM_SERVICE_API)
-					.then(
-						function(response) {
-							console.log('Fetched successfully all teams');
-							$localStorage.teams = response.data;
-							deferred.resolve(response);
-						},
-						function(errResponse) {
-							console.error('Error while loading teams');
-							deferred.reject(errResponse);
-						}
+				$http({
+					url : urls.TEAM_SERVICE_API,
+					method : 'GET',
+					headers : {
+						'token' : $store.token
+					}
+				}).then(
+					function(response) {
+						console.log('Fetched successfully all teams');
+						$store.teams = response.data;
+						deferred.resolve(response);
+					},
+					function(errResponse) {
+						console.error('Error while loading teams');
+						deferred.reject(errResponse);
+					}
 				);
 				return deferred.promise;
 			}
@@ -61,7 +66,7 @@ angular.module('pokemonApp').factory('TeamService',
 					url : urls.TEAM_SERVICE_API,
 					method : 'POST',
 					data : team,
-					header : {
+					headers : {
 						'token' : $localStorage.token
 					}
 				}).then(

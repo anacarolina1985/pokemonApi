@@ -33,8 +33,16 @@ app.config([ '$stateProvider', '$urlRouterProvider',
 				url : '/team',
 				templateUrl : 'partials/team',
 				controller : 'TeamController',
-				controllerAs : 'team'
-			})
+				controllerAs : 'team',
+				resolve: {
+                    teams: function ($q, TeamService) {
+                        console.log('Load all teams');
+                        var deferred = $q.defer();
+                        TeamService.loadAllTeams().then(deferred.resolve, deferred.resolve);
+                        return deferred.promise;
+                    }
+                }
+            })
 			.state('teamDetail', {
 				url : '/team/:id',
 				templateUrl : 'partials/teamDetail',
