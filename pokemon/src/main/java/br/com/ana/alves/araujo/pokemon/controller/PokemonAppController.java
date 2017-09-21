@@ -11,27 +11,33 @@ public class PokemonAppController {
 	@RequestMapping("/")
 	String home(ModelMap modal) {
 		modal.addAttribute("title", "Pokemon");
-		return "login";
+		return "index";
+	}
+
+	@RequestMapping("/team")
+	String team(ModelMap modal) {
+		modal.addAttribute("title", "Team Pokemon");
+		return "index";
+	}
+
+	@RequestMapping("/login")
+	String login(ModelMap modal) {
+		modal.addAttribute("title", "Login Pokemon");
+		return "index";
+	}
+
+	@RequestMapping("/loginCreate")
+	String loginCreate(ModelMap modal) {
+		modal.addAttribute("title", "Login Create Pokemon");
+		return "index";
 	}
 	
-	@RequestMapping("/createlogin")
-	String createLogin(ModelMap modal) {
-		modal.addAttribute("title", "Pokemon Create Login");
-		return "createlogin";
+	@RequestMapping("/team/{id}")
+	String teamDetail(ModelMap modal) {
+		modal.addAttribute("title", "Team Detail Pokemon");
+		return "index";
 	}
-	
-	@RequestMapping("/createteam")
-	String createTeam(ModelMap modal) {
-		modal.addAttribute("title", "Pokemon Create Team");
-		return "team";
-	}
-	
-	@RequestMapping("/detailteam")
-	String detailTeam(ModelMap modal) {
-		modal.addAttribute("title", "Pokemon Detail Team");
-		return "detailteam";
-	}
-	
+
 	@RequestMapping("/partials/{page}")
 	String partialHandler(@PathVariable("page") final String page) {
 		return page;
