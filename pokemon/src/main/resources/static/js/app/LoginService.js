@@ -18,7 +18,9 @@ angular.module('pokemonApp').factory('LoginService',
 					.then(
 						function(response) {
 							console.log('Login successfully');
-							$localStorage.token = response.data;
+							if(response.data && response.data.data){
+								$localStorage.token = response.data.data;
+							}
 							deferred.resolve(response);
 						},
 						function(errResponse) {
@@ -36,7 +38,9 @@ angular.module('pokemonApp').factory('LoginService',
 					.then(
 						function(response) {
 							console.log('Login create successfully');
-							$localStorage.token = response.data;
+							if(response.data && response.data.data){
+								$localStorage.token = response.data.data;
+							}
 							deferred.resolve(response);
 						},
 						function(errResponse) {

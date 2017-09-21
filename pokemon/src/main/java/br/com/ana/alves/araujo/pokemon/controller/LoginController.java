@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.ana.alves.araujo.pokemon.model.Login;
+import br.com.ana.alves.araujo.pokemon.response.ResponseBase;
 import br.com.ana.alves.araujo.pokemon.service.LoginService;
 import br.com.ana.alves.araujo.pokemon.util.CustomErrorType;
 import br.com.ana.alves.araujo.pokemon.util.LoginJWTUtils;
@@ -32,7 +33,7 @@ public class LoginController {
 			return new ResponseEntity<>(new CustomErrorType("Login not match"), HttpStatus.NOT_FOUND);
 
 		}
-		return new ResponseEntity<>(LoginJWTUtils.createJWT(accessLogin), HttpStatus.OK);
+		return new ResponseEntity<>(new ResponseBase(LoginJWTUtils.createJWT(login)), HttpStatus.OK);
 	}
 
 	@PostMapping("/create")
@@ -41,6 +42,6 @@ public class LoginController {
 		if (login == null) {
 			return new ResponseEntity<>(new CustomErrorType("login not Modified"), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return new ResponseEntity<>(LoginJWTUtils.createJWT(login), HttpStatus.OK);
+		return new ResponseEntity<>(new ResponseBase(LoginJWTUtils.createJWT(login)), HttpStatus.OK);
 	}
 }
