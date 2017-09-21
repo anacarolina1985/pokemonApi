@@ -28,7 +28,7 @@ public class Login {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	@ApiModelProperty(value = "Username value")
-	@Column(name = "USER_NAME", nullable = false)
+	@Column(name = "USER_NAME", nullable = false, unique = true)
 	private String username;
 	@ApiModelProperty(value = "Name value to be used on home")
 	@Column(name = "NAME", nullable = false)

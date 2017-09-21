@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.ana.alves.araujo.pokemon.model.Login;
 import br.com.ana.alves.araujo.pokemon.service.LoginService;
+import br.com.ana.alves.araujo.pokemon.util.CustomErrorType;
 import br.com.ana.alves.araujo.pokemon.util.LoginJWTUtils;
 
 @RestController
@@ -25,20 +26,21 @@ public class LoginController {
 	LoginService loginService;
 
 	@PostMapping("/")
-	public ResponseEntity<String> login(@RequestBody Login login) {
+	public ResponseEntity<?> login(@RequestBody Login login) {
 		Login accessLogin = loginService.findByName(login.getUsername(), login.getPassword());
 		if (accessLogin == null) {
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(new CustomErrorType("Login not match"), HttpStatus.NOT_FOUND);
+
 		}
-		return new ResponseEntity<String>(LoginJWTUtils.createJWT(accessLogin), HttpStatus.OK);
+		return new ResponseEntity<>(LoginJWTUtils.createJWT(accessLogin), HttpStatus.OK);
 	}
-	
+
 	@PostMapping("/create")
-	public ResponseEntity<String> createLogin(@Validated @RequestBody Login login) {
+	public ResponseEntity<?> createLogin(@Validated @RequestBody Login login) {
+		login = loginService.saveUser(login);
 		if (login == null) {
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(new CustomErrorType("login not Modified"), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		loginService.saveUser(login);
-		return new ResponseEntity<String>(LoginJWTUtils.createJWT(login), HttpStatus.OK);
+		return new ResponseEntity<>(LoginJWTUtils.createJWT(login), HttpStatus.OK);
 	}
 }

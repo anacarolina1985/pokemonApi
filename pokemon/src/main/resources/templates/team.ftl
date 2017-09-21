@@ -35,20 +35,16 @@
 		        <table class="table table-hover">
 		            <thead>
 		            <tr>
-		                <th>ID</th>
 		                <th>NAME</th>
-		                <th>AGE</th>
-		                <th>SALARY</th>
+		                <th>POKEMON SIZE</th>
 		                <th width="100"></th>
 		                <th width="100"></th>
 		            </tr>
 		            </thead>
 		            <tbody>
 		            <tr ng-repeat="u in team.getAllTeams()">
-		                <td>{{u.id}}</td>
 		                <td>{{u.name}}</td>
-		                <td>{{u.age}}</td>
-		                <td>{{u.salary}}</td>
+		                <td>{{u.pokemons() == null ? 0 : u.pokemons().size()}}</td>
 		                <td><button type="button" ng-click="team.editTeam(u.id)" class="btn btn-success custom-width">Edit</button></td>
 		                <td><button type="button" ng-click="team.removeTeam(u.id)" class="btn btn-danger custom-width">Remove</button></td>
 		            </tr>

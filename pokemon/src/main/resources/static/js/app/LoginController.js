@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('pokemonApp').controller('LoginController',
-	[ 'LoginService', '$scope', function(LoginService, $scope) {
+	[ 'LoginService', '$scope', '$state', function(LoginService, $scope, $state) {
 
 		var self = this;
 		self.model = {};
@@ -9,7 +9,9 @@ angular.module('pokemonApp').controller('LoginController',
 		self.submit = submit;
 		self.createLogin = createLogin;
 		self.signup = signup;
+		self.signin = signin;
 		self.reset = reset;
+		self.cancel = cancel;
 
 		self.successMessage = '';
 		self.errorMessage = '';
@@ -20,7 +22,7 @@ angular.module('pokemonApp').controller('LoginController',
 
 		function submit() {
 			console.log('Submitting');
-			TeamService.login(self.model)
+			LoginService.login(self.model)
 				.then(
 					function(response) {
 						console.log('Login successfully');
@@ -29,6 +31,7 @@ angular.module('pokemonApp').controller('LoginController',
 						self.done = true;
 						self.model = {};
 						$scope.myForm.$setPristine();
+						$state.go('team');
 					},
 					function(errResponse) {
 						console.error('Error while Login');
@@ -40,7 +43,7 @@ angular.module('pokemonApp').controller('LoginController',
 
 		function createLogin() {
 			console.log('Create login');
-			TeamService.login(self.model)
+			LoginService.createLogin(self.model)
 				.then(
 					function(response) {
 						console.log('Create Login successfully');
@@ -49,6 +52,7 @@ angular.module('pokemonApp').controller('LoginController',
 						self.done = true;
 						self.model = {};
 						$scope.myForm.$setPristine();
+						$state.go('team');
 					},
 					function(errResponse) {
 						console.error('Error while Create Login');
@@ -58,9 +62,17 @@ angular.module('pokemonApp').controller('LoginController',
 			);
 		}
 
+		function signin() {
+			$state.go('login');
+		}
 
 		function signup() {
-			//do redirect page create Login		
+			$state.go('loginCreate');
+		}
+
+		function cancel() {
+			reset();
+			$state.go('home');
 		}
 
 		function reset() {

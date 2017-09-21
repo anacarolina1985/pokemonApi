@@ -19,11 +19,14 @@ import br.com.ana.alves.araujo.pokemon.request.PokemonTeamRequest;
 import br.com.ana.alves.araujo.pokemon.service.LoginService;
 import br.com.ana.alves.araujo.pokemon.service.ParamConfigurationService;
 import br.com.ana.alves.araujo.pokemon.service.PokemonApiService;
+import br.com.ana.alves.araujo.pokemon.util.CustomErrorType;
 import br.com.ana.alves.araujo.pokemon.util.LoginJWTUtils;
 
 @RestController
 @RequestMapping("/api/v1/pokemon/team")
 public class TeamController {
+
+	private static final String HEADER_TOKEN = "token";
 
 	public static final Logger logger = LoggerFactory.getLogger(TeamController.class);
 
@@ -37,7 +40,8 @@ public class TeamController {
 	PokemonApiService pokemonApiService;
 
 	@PostMapping("/addPokemon")
-	public ResponseEntity<String> addPokemon(@RequestHeader String token, @RequestBody PokemonTeamRequest teamRequest) {
+	public ResponseEntity<String> addPokemon(@RequestHeader(HEADER_TOKEN) String token,
+			@RequestBody PokemonTeamRequest teamRequest) {
 		Login accessLogin = LoginJWTUtils.parseJWT(token);
 		if (accessLogin == null) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -72,7 +76,8 @@ public class TeamController {
 	}
 
 	@PostMapping("/addMove")
-	public ResponseEntity<String> addMove(@RequestHeader String token, @RequestBody PokemonTeamRequest teamRequest) {
+	public ResponseEntity<String> addMove(@RequestHeader(HEADER_TOKEN) String token,
+			@RequestBody PokemonTeamRequest teamRequest) {
 		Login accessLogin = LoginJWTUtils.parseJWT(token);
 		if (accessLogin == null) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -113,25 +118,26 @@ public class TeamController {
 	}
 
 	@PostMapping("/")
-	public ResponseEntity<String> addTeam(@RequestHeader String token, @RequestBody Team team) {
+	public ResponseEntity<?> addTeam(@RequestHeader(HEADER_TOKEN) String token, @RequestBody Team team) {
 
 		Login accessLogin = LoginJWTUtils.parseJWT(token);
 		if (accessLogin == null) {
-			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new CustomErrorType("UNAUTHORIZED"), HttpStatus.UNAUTHORIZED);
 		}
 
 		accessLogin = loginService.findByName(accessLogin.getUsername(), accessLogin.getPassword());
 		if (accessLogin == null) {
-			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new CustomErrorType("UNAUTHORIZED"), HttpStatus.UNAUTHORIZED);
+
 		}
 
 		boolean added = accessLogin.addTeam(team);
 
 		if (!added) {
-			return new ResponseEntity<String>("Team não criado", HttpStatus.NOT_MODIFIED);
+			return new ResponseEntity<>(new CustomErrorType("Team not created"), HttpStatus.NOT_MODIFIED);
 		}
 
 		accessLogin = loginService.updateUser(accessLogin);
-		return new ResponseEntity<String>(LoginJWTUtils.createJWT(accessLogin), HttpStatus.OK);
+		return new ResponseEntity<>(accessLogin.getTeams(), HttpStatus.OK);
 	}
 }

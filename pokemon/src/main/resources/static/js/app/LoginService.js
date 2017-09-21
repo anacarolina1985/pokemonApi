@@ -6,7 +6,7 @@ angular.module('pokemonApp').factory('LoginService',
 
 			var factory = {
 				login : login,
-				createUser : createUser,
+				createLogin : createLogin
 			};
 
 			return factory;
@@ -36,7 +36,8 @@ angular.module('pokemonApp').factory('LoginService',
 					.then(
 						function(response) {
 							console.log('Login create successfully');
-							deferred.resolve(response.data);
+							$localStorage.token = response.data;
+							deferred.resolve(response);
 						},
 						function(errResponse) {
 							console.error('Error while creating Login : ' + errResponse.data.errorMessage);

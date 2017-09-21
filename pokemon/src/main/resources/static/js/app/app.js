@@ -2,8 +2,10 @@ var app = angular.module('pokemonApp', [ 'ui.router', 'ngStorage' ]);
 
 app.constant('urls', {
 	BASE : 'http://localhost:8080/PokemonApp',
-	TEAM_SERVICE_API : 'http://localhost:8080/PokemonApp/api/v1/pokemon/team',
-	LOGIN_SERVICE_API : 'http://localhost:8080/PokemonApp/api/v1/pokemon/login'
+	TEAM_SERVICE_API : 'http://localhost:8080/PokemonApp/api/v1/pokemon/team/',
+	LOGIN_SERVICE_API : 'http://localhost:8080/PokemonApp/api/v1/pokemon/login/',
+	API_SERVICE_API : 'http://localhost:8080/PokemonApp/api/v1/pokemon/api/',
+	PARAM_SERVICE_API : 'http://localhost:8080/PokemonApp/api/v1/pokemon/param_config/'
 });
 
 app.config([ '$stateProvider', '$urlRouterProvider',
@@ -12,7 +14,8 @@ app.config([ '$stateProvider', '$urlRouterProvider',
 		$stateProvider
 			.state('home', {
 				url : '/',
-				templateUrl : 'index',
+				controller : 'LoginController',
+				controllerAs : 'login'
 			})
 			.state('login', {
 				url : '/login',
@@ -34,10 +37,9 @@ app.config([ '$stateProvider', '$urlRouterProvider',
 			})
 			.state('teamDetail', {
 				url : '/team/:id',
-				templateUrl : 'partials/team',
+				templateUrl : 'partials/teamDetail',
 				controller : 'TeamController',
 				controllerAs : 'team',
-				
 			});
 
 		$urlRouterProvider.otherwise('/');

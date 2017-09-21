@@ -7,10 +7,10 @@ angular.module('pokemonApp').factory('TeamService',
 			var factory = {
 				loadAllTeams : loadAllTeams,
 				getAllTeams : getAllTeams,
-				getUser : getUser,
-				createUser : createUser,
-				updateUser : updateUser,
-				removeUser : removeUser
+				getTeam : getTeam,
+				createTeam : createTeam,
+				updateTeam : updateTeam,
+				removeTeam : removeTeam
 			};
 
 			return factory;
@@ -38,58 +38,64 @@ angular.module('pokemonApp').factory('TeamService',
 			}
 
 			function getTeam(id) {
-				console.log('Fetching User with id :' + id);
+				console.log('Fetching Team with id :' + id);
 				var deferred = $q.defer();
 				$http.get(urls.TEAM_SERVICE_API + id)
 					.then(
 						function(response) {
-							console.log('Fetched successfully User with id :' + id);
+							console.log('Fetched successfully Team with id :' + id);
 							deferred.resolve(response.data);
 						},
 						function(errResponse) {
-							console.error('Error while loading user with id :' + id);
+							console.error('Error while loading Team with id :' + id);
 							deferred.reject(errResponse);
 						}
 				);
 				return deferred.promise;
 			}
 
-			function createUser(user) {
-				console.log('Creating User');
+			function createTeam(team) {
+				console.log('Creating Team');
 				var deferred = $q.defer();
-				$http.post(urls.TEAM_SERVICE_API, user)
+				$http({
+					url : urls.TEAM_SERVICE_API,
+					method : 'POST',
+					data : team,
+					header : {
+						'token' : $localStorage.token
+					}
+				}).then(
+					function(response) {
+						loadAllTeams();
+						deferred.resolve(response.data);
+					},
+					function(errResponse) {
+						console.error('Error while creating Team : ' + errResponse.data.errorMessage);
+						deferred.reject(errResponse);
+					}
+				);
+				return deferred.promise;
+			}
+
+			function updateTeam(team, id) {
+				console.log('Updating Team with id ' + id);
+				var deferred = $q.defer();
+				$http.put(urls.TEAM_SERVICE_API + id, team)
 					.then(
 						function(response) {
 							loadAllTeams();
 							deferred.resolve(response.data);
 						},
 						function(errResponse) {
-							console.error('Error while creating User : ' + errResponse.data.errorMessage);
+							console.error('Error while updating Team with id :' + id);
 							deferred.reject(errResponse);
 						}
 				);
 				return deferred.promise;
 			}
 
-			function updateUser(user, id) {
-				console.log('Updating User with id ' + id);
-				var deferred = $q.defer();
-				$http.put(urls.TEAM_SERVICE_API + id, user)
-					.then(
-						function(response) {
-							loadAllTeams();
-							deferred.resolve(response.data);
-						},
-						function(errResponse) {
-							console.error('Error while updating User with id :' + id);
-							deferred.reject(errResponse);
-						}
-				);
-				return deferred.promise;
-			}
-
-			function removeUser(id) {
-				console.log('Removing User with id ' + id);
+			function removeTeam(id) {
+				console.log('Removing Team with id ' + id);
 				var deferred = $q.defer();
 				$http.delete(urls.TEAM_SERVICE_API + id)
 					.then(
@@ -98,7 +104,7 @@ angular.module('pokemonApp').factory('TeamService',
 							deferred.resolve(response.data);
 						},
 						function(errResponse) {
-							console.error('Error while removing User with id :' + id);
+							console.error('Error while removing Team with id :' + id);
 							deferred.reject(errResponse);
 						}
 				);
